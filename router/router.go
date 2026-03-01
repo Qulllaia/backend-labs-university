@@ -8,6 +8,8 @@ import (
 	"main/router/lr3"
 
 	"main/router/lr4"
+
+	"main/router/lr5"
 )
 
 func RouterStart(router *gin.Engine, db *sqlx.DB) {
@@ -27,6 +29,11 @@ func RouterStart(router *gin.Engine, db *sqlx.DB) {
 		lr4router := api.Group("/lr4")
 		{
 			lr4.RegisterRouterForLR4(lr4router, db)
+		}
+
+		orderRouter := api.Group("/lr5")
+		{
+			lr5.RegisterRouterForLR5(orderRouter, db)
 		}
 	}
 }

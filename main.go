@@ -14,7 +14,7 @@ import (
 
 // @title           Swagger Example API
 // @host      localhost:5000
-// @BasePath  /lr4
+// @BasePath  /api
 func main() {
 	config := config.InitConfig()
 	db := database.InitDatabase(config)

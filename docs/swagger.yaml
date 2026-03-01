@@ -1,5 +1,20 @@
-basePath: /lr4
+basePath: /api
 definitions:
+  dto.CreateOrderDTO:
+    properties:
+      productId:
+        example: 123
+        type: integer
+      status:
+        enum:
+        - CREATED
+        - DELIVERING
+        - DONE
+        type: string
+    required:
+    - productId
+    - status
+    type: object
   dto.CreateProductDTO:
     properties:
       createdat:
@@ -17,6 +32,21 @@ definitions:
     required:
     - name
     - price
+    type: object
+  dto.OrderDTO:
+    properties:
+      id:
+        example: 1
+        type: integer
+      productId:
+        example: 123
+        type: integer
+      status:
+        enum:
+        - CREATED
+        - DELIVERING
+        - DONE
+        type: string
     type: object
   dto.ProductDTO:
     properties:
@@ -43,11 +73,162 @@ definitions:
       error:
         type: string
     type: object
+  dto.UpdateOrderDTO:
+    properties:
+      status:
+        enum:
+        - CREATED
+        - DELIVERING
+        - DONE
+        type: string
+    required:
+    - status
+    type: object
 host: localhost:5000
 info:
   contact: {}
   title: Swagger Example API
 paths:
+  /orders:
+    get:
+      description: Returns a list of all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OrderDTO'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+      summary: Get all orders
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order with the provided data
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateOrderDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.OrderDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+      summary: Create a new order
+      tags:
+      - orders
+  /orders/{id}:
+    delete:
+      description: Deletes an order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+      summary: Delete an order
+      tags:
+      - orders
+    get:
+      description: Returns a single order by its ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrderDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+      summary: Get order by ID
+      tags:
+      - orders
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateOrderDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrderDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ServerErrorResponse'
+      summary: Update an order
+      tags:
+      - orders
   /products:
     get:
       description: Returns a list of all products
