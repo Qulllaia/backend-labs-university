@@ -102,6 +102,17 @@ func (oc *OrderController) GetOrders(context *gin.Context) {
 	context.JSON(200, orders)
 }
 
+// GetOrdersWithStatus godoc
+// @Summary      Get orders by product ID and status
+// @Description  Returns orders filtered by product ID and status
+// @Tags         orders
+// @Produce      json
+// @Param        productId path int true "Product ID"
+// @Param        status path string true "Order status" Enums(CREATED, DELIVERING, DONE)
+// @Success      200  {array}   dto.OrderDTO
+// @Failure      404  {object}  dto.ServerErrorResponse
+// @Failure      500  {object}  dto.ServerErrorResponse
+// @Router       /orders/product/{productId}/status/{status} [get]
 func (oc *OrderController) GetOrdersWithStatus(context *gin.Context) {
 	var OrderAndStatus dto.URIOrderWithProductIDAndStatus
 
