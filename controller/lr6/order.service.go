@@ -11,7 +11,6 @@ type IOrderService interface {
 	CreateOrder(dto.CreateOrderDTO) (*dto.OrderDTO, error)
 }
 
-
 type OrderService struct {
 	OrderModel model.IOrderModel	
 }

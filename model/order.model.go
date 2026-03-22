@@ -16,7 +16,6 @@ type OrderModel struct {
 	DB *sqlx.DB
 }
 
-
 func CreateOrderModel(db *sqlx.DB) *OrderModel {
 	return &OrderModel{DB: db}
 }
