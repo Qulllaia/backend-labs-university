@@ -94,6 +94,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/orders/product/{productId}/status/{status}": {
+            "get": {
+                "description": "Returns orders filtered by product ID and status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Get orders by product ID and status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "productId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "CREATED",
+                            "DELIVERING",
+                            "DONE"
+                        ],
+                        "type": "string",
+                        "description": "Order status",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.OrderDTO"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ServerErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orders/{id}": {
             "get": {
                 "description": "Returns a single order by its ID",
@@ -440,8 +496,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "productId": {
-                    "type": "integer",
-                    "example": 123
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",
@@ -482,12 +537,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "productId": {
-                    "type": "integer",
-                    "example": 123
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",

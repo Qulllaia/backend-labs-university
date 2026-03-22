@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 
+	"main/router/lr6"
 	"main/router/lr2"
 	"main/router/lr3"
 
@@ -34,6 +35,10 @@ func RouterStart(router *gin.Engine, db *sqlx.DB) {
 		orderRouter := api.Group("/lr5")
 		{
 			lr5.RegisterRouterForLR5(orderRouter, db)
+		}
+		orderRouterlr6 := api.Group("/lr6")
+		{
+			lr6.RegisterRouterForLR6(orderRouterlr6, db)
 		}
 	}
 }
