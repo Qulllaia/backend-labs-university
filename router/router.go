@@ -3,19 +3,23 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"gorm.io/gorm"
 
+	"main/database/repos"
 	"main/middleware"
+	"main/router/lr11"
 	"main/router/lr2"
 	"main/router/lr3"
 	"main/router/lr6"
 	"main/router/lr7"
+	"main/router/lr8"
 
 	"main/router/lr4"
 
 	"main/router/lr5"
 )
 
-func RouterStart(router *gin.Engine, db *sqlx.DB) {
+func RouterStart(router *gin.Engine, db *sqlx.DB, gormDB *gorm.DB) {
 	api := router.Group("/api")
 	{
 
@@ -45,10 +49,24 @@ func RouterStart(router *gin.Engine, db *sqlx.DB) {
 		lr7router := api.Group("/lr7")
 		{
 			lr7router.Use(middleware.BlockPathMiddleware())
-			
+
 			lr7router.Use(middleware.RequestTraceMiddleware())
-			
+
 			lr7.RegisterRouterForLR7(lr7router)
+		}
+
+		lr8router := api.Group("/lr8")
+		{
+			lr8.RegisterRouterForLR8(lr8router)
+		}
+
+		lr11router := api.Group("/lr11")
+		{
+			ur := &repos.UserRepo{DB: gormDB}
+			br := &repos.BalanceRepo{DB: gormDB}
+			tr := &repos.TransactionRepo{DB: gormDB}
+
+			lr11.RegisterRouterForLR11(lr11router, ur, br, tr)
 		}
 	}
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"main/config"
 	"main/database"
+	"main/logger"
 	"main/router"
 
 	_ "main/docs"
@@ -19,9 +20,15 @@ func main() {
 	config := config.InitConfig()
 	db := database.InitDatabase(config)
 
+	gormDB := database.InitGORM_DB(config)
+
+	logger.InitLogger("app.log")
+
 	app := gin.Default()
-	router.RouterStart(app, db)
+	router.RouterStart(app, db, gormDB)
+
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	app.Static("/static", "./static")
 
 	err := app.Run(":5000")
 	if err != nil {
